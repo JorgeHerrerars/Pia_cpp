@@ -126,6 +126,7 @@ vector <Usuario> leerUsuariosF();
 Usuario registrarUsuario(vector<Usuario>);
 void guardarUsuariosF(vector <Usuario>);
 Usuario sesion(vector <Usuario>);
+void agregarContactos(Usuario&);
 
 int main(){
     char decision;
@@ -143,29 +144,69 @@ int main(){
             switch(decision){
             case 'i':
                 {
-                    if(!sesion(usuarios).getUser().empty()){
-                        Usuario usuario = sesion(usuarios);
+                    Usuario usuario = sesion(usuarios);
+                    if(!usuario.getUser().empty()){
+                        char decision2;
+                        do{
+                        cout << "Que deseas hacer?" << endl;
                         cout << "(a)Agregar contactos" << endl;
                         cout << "(m)Mostrar contactos" << endl;
                         cout << "(e)Eliminar contacto" << endl;
                         cout << "(b)Buscar contacto" << endl;
                         cout << "(s)Cerrar sesion" << endl;
+                        cin >> decision2;
+                        switch(decision2){
+                        case 'a':
+                            {
+                                int c = 0;
+                                cin.ignore();
+                                usuario.setContactos(usuario.agregarContacto());
+                                for(Usuario u:usuarios){
+                                    if(u.getId() == usuario.getId()){
+                                        usuarios[c] = usuario;
+                                    }else{
+                                        c++;
+                                    }
+                                }
+                                guardarUsuariosF(usuarios);
+                            }
+                        break;
+                        case 'm':
+                            {
+                                usuarios = leerUsuariosF();
+                                for(Contacto c:usuario.getContactos()){
+                                    cout << c << endl;
+                                }
+                            }
+                        break;
+                        case 'e':
+                            {
+
+                            }
+                        break;
+                        case 'b':
+                            {
+
+                            }
+                        break;
+                        }
+                        }while(decision2 != 's');
                     }
                 }
-                break;
+            break;
             case 'r':
                 {
                     usuarios.push_back(registrarUsuario(usuarios));
                     guardarUsuariosF(usuarios);
                 }
-                break;
+            break;
             case 'm':
                 {
                     for(Usuario u:usuarios){
                         cout << u << endl;
                     }
                 }
-                break;
+            break;
             case 'b':
                 {
                     int idBuscado;
@@ -183,7 +224,9 @@ int main(){
                         cout << "Lo sentimos, no pudimos encontrar un usuario con ese ID" << endl;
                     }
                 }
-                break;
+            break;
+            default:
+                cout << "Lo sentimos, aun no contamos con esa opcion" << endl;
             }
         }while(decision != 's');
     }catch(...){
@@ -191,6 +234,9 @@ int main(){
     }
 }
 
+void agregarContactos (Usuario &usuario){
+    usuario.agregarContacto();
+}
 Usuario sesion(vector <Usuario> usuarios){ //Valida una sesión existente
     string user,pass;
     Usuario usuarioE;
@@ -305,6 +351,7 @@ vector <Usuario> leerUsuariosF(){ //En esta función se buscan los archivos de us
                         getline(ifs2,auxiliar2);
                         if(auxiliar2.find("UID:")!=string::npos){
                             contacto.userid = stoi(auxiliar2.substr(auxiliar2.find("UID:")+4));
+                            //cout << "Encontre uno" << endl;
                         }
                         if(auxiliar2.find("ID:")!=string::npos){
                             contacto.id = stoi(auxiliar2.substr(auxiliar2.find("ID:")+3));
@@ -329,15 +376,18 @@ vector <Usuario> leerUsuariosF(){ //En esta función se buscan los archivos de us
                         }
                         if(auxiliar2.find("Descripcion:")!=string::npos){
                             contacto.descrip = auxiliar2.substr(auxiliar2.find("Descripcion:")+12);
+                            //cout << "Encontre uno" << endl;
                         }
-                        if(auxiliar2.find("**********")!=string::npos && contacto.id == id){
+                        if(auxiliar2.find("**********")!=string::npos && contacto.userid == id){
                             contactos.push_back(contacto);
+                            //cout << "Encontre uno" << endl;
                         }
                     }
                     usuario.setId(id);
                     usuario.setUser(user);
                     usuario.setPass(pass);
                     usuario.setContactos(contactos);
+                    contactos.clear();
                     usuarios.push_back(usuario);
                 }
             }
