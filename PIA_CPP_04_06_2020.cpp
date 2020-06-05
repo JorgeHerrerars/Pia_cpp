@@ -125,6 +125,7 @@ int leerInt();
 vector <Usuario> leerUsuariosF();
 Usuario registrarUsuario(vector<Usuario>);
 void guardarUsuariosF(vector <Usuario>);
+bool sesion(vector <Usuario>);
 int main(){
     char decision;
     vector <Usuario> usuarios;
@@ -132,33 +133,35 @@ int main(){
         do{
             usuarios = leerUsuariosF();
             cout << "PRODUCTO INTEGRADOR" << endl;
-            cout << "(l)Iniciar sesion" << endl;
+            cout << "(i)Iniciar sesion" << endl;
             cout << "(r)Registrarse" << endl;
-            cout << "(p)Mostrar lista de usuarios" << endl;
-            cout << "(s)Buscar usuario" << endl;
-            cout << "(e)Salir" << endl;
+            cout << "(m)Mostrar lista de usuarios" << endl;
+            cout << "(b)Buscar usuario" << endl;
+            cout << "(s)Salir" << endl;
             cin >> decision;
             switch(decision){
-            case 'l':
+            case 'i':
                 {
+                    if(sesion(usuarios)){
+                        cout << "(a)Agregar contactos" << endl;
 
+                    }
                 }
                 break;
             case 'r':
                 {
-                    cin.ignore();
                     usuarios.push_back(registrarUsuario(usuarios));
                     guardarUsuariosF(usuarios);
                 }
                 break;
-            case 'p':
+            case 'm':
                 {
                     for(Usuario u:usuarios){
                         cout << u << endl;
                     }
                 }
                 break;
-            case 's':
+            case 'b':
                 {
                     int idBuscado;
                     bool encontrado = false;
@@ -177,12 +180,37 @@ int main(){
                 }
                 break;
             }
-        }while(decision != 'e');
+        }while(decision != 's');
     }catch(...){
         cout << "Error desconocido" << endl;
     }
 }
 
+bool sesion(vector <Usuario> usuarios){ //Valida una sesión existente
+    string user,pass;
+    bool coincide = false;
+    cout << "Username:" << endl;
+    cin.ignore();
+    getline(cin, user);
+    cout << "Password:" << endl;
+    getline(cin,pass);
+    for(Usuario u:usuarios){
+        if(user == u.getUser() && pass == u.getPass()){
+            coincide = true;
+            cout << "Bienvenido " << user << endl;
+            break;
+        }else{
+            if(user == u.getUser()){
+                cout << "Password equivocado" << endl;
+                break;
+            }
+        }
+    }
+    if(!coincide){
+        cout << "La sesion que ingreso no existe aun" << endl;
+    }
+    return coincide;
+}
 int leerInt(){ //Valida le entrada
     int x;
     cin >> x;
@@ -219,8 +247,8 @@ long long leerNumero(){ //Se valida la entrada de numeros long long
 }
 Usuario registrarUsuario(vector <Usuario> usuarios){ //Pide la entrada de un usuario para registrarlo en archivos
     Usuario usuario;
+    cin.ignore();
     cin >> usuario;
-
     int tam;
     int id;
     if(usuarios.empty()){
@@ -229,6 +257,12 @@ Usuario registrarUsuario(vector <Usuario> usuarios){ //Pide la entrada de un usu
         tam = usuarios.size()-1;
         id = usuarios[tam].getId()+1;
         usuario.setId(id);
+    }
+    for(Usuario u:usuarios){
+        if(u.getUser()==usuario.getUser()){
+            cout << "Lamentamos las molestias, pero este username ya esta ocupado" <<endl;
+            return registrarUsuario(usuarios);
+        }
     }
     return usuario;
 }
