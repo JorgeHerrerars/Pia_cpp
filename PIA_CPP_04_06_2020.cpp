@@ -68,6 +68,7 @@ public:
         }else{
             nuevo.id = contactos[contactos.size()-1].id+1;
         }
+        nuevo.userid = id;
         nuevos.push_back(nuevo);
         return nuevos;
     }
@@ -118,12 +119,13 @@ public:
 long long verificarNumero();
 vector <Usuario> leerUsuariosF();
 Usuario registrarUsuario(vector<Usuario>);
+void guardarUsuariosF(vector <Usuario>);
 int main(){
     char decision;
     vector <Usuario> usuarios;
     try{
         do{
-            //usuarios = leerUsuarios();
+            //usuarios = leerUsuariosF();
             cout << "PRODUCTO INTEGRADOR" << endl;
             cout << "(l)Iniciar sesion" << endl;
             cout << "(r)Registrarse" << endl;
@@ -141,11 +143,12 @@ int main(){
                 {
                     cin.ignore();
                     usuarios.push_back(registrarUsuario(usuarios));
-
+                    guardarUsuariosF(usuarios);
                 }
                 break;
             case 'p':
                 {
+                    //usuarios = leerUsuariosF();
                     for(Usuario u:usuarios){
                         cout << u << endl;
                     }
@@ -159,7 +162,7 @@ int main(){
             }
         }while(decision != 'e');
     }catch(...){
-
+        cout << "Error desconocido" << endl;
     }
 }
 
@@ -206,7 +209,7 @@ vector <Usuario> leerUsuariosF(){ //En esta función se buscan los archivos de us
     string user = "";
     string pass = "";
     int id = 0;
-    if(ifs.is_open()){
+    if(ifs.is_open() && ifs.is_open()){
         while(!ifs.eof()){
             getline(ifs,auxiliar);
             if(!auxiliar.empty()){
@@ -261,14 +264,34 @@ vector <Usuario> leerUsuariosF(){ //En esta función se buscan los archivos de us
                 }
             }
         }
+    }else{
+        ofstream ofs ("usuarios.txt");
+        ofstream ofs2 ("contactos.txt");
     }
     return usuarios;
 }
-int agregarUsuariosF(vector <Usuario> usuarios){
+void guardarUsuariosF(vector <Usuario> usuarios){
     ofstream ofs ("usuarios.txt");
     ofstream ofs2 ("contactos.txt");
-    for(Usuario u:usuarios){
-
+    if(!usuarios.empty()){
+        for(Usuario u:usuarios){
+            ofs << "User ID:" << u.getId() << endl
+            << "Username:" << u.getUser() << endl
+            << "Password:" << u.getPass() << endl
+            << "**********" << endl;
+            for(Contacto c:u.getContactos()){
+                ofs2 << "UID:" <<  c.userid << endl
+                << "ID:" << c.id << endl
+                << "Nombre:" << c.nombre << endl
+                << "Celular:" << c.celular << endl
+                << "Telefono de casa:" << c.telefonoC << endl
+                << "Telefono de trabajo:" << c.telefonoT << endl
+                << "Correo:" << c.correo << endl
+                << "Direccion:" << c.direccion << endl
+                << "Descripcion:" << c.descrip << endl
+                << "**********" << endl;
+            }
+        }
     }
 }
 istream& operator>> (istream& is, Contacto& contacto){ //Operador para ingresar Contacto
