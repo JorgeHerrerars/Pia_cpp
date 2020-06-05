@@ -121,6 +121,7 @@ public:
 };
 //PROTOTIPOS DE FUNCIONES
 long long verificarNumero();
+int leerInt();
 vector <Usuario> leerUsuariosF();
 Usuario registrarUsuario(vector<Usuario>);
 void guardarUsuariosF(vector <Usuario>);
@@ -159,7 +160,20 @@ int main(){
                 break;
             case 's':
                 {
-
+                    int idBuscado;
+                    bool encontrado = false;
+                    cout << "ID del usuario a buscar:";
+                    idBuscado = leerInt();
+                    for(Usuario u:usuarios){
+                        if(u.getId() == idBuscado){
+                            encontrado = true;
+                            cout << u << endl;
+                            break;
+                        }
+                    }
+                    if(!encontrado){
+                        cout << "Lo sentimos, no pudimos encontrar un usuario con ese ID" << endl;
+                    }
                 }
                 break;
             }
@@ -169,8 +183,25 @@ int main(){
     }
 }
 
-
-long long leerNumero(){ //Se valida la entrada de numeros
+int leerInt(){ //Valida le entrada
+    int x;
+    cin >> x;
+        if(cin.peek() != '\n' && cin.peek() != ' '){
+            cin.clear(ios::badbit);
+        }
+        if(cin.good())
+            return x;
+        //!si la entrada no fue correcta
+        else if (cin.fail()){
+            cin.clear(); // pone 0 a todos los indicadores de error
+            cin.ignore(numeric_limits<int>::max(),'\n'); /*!numeric_limits<int>::max()
+                                        retorna la maypr cant de digitos que almacena
+                                        un dato int*/
+            cout << "\nVuelve a intentarlo";
+            return leerInt();
+        }
+}
+long long leerNumero(){ //Se valida la entrada de numeros long long
     long long num;
     cin >> num;
     if(cin.peek() != '\n' && cin.peek() != ' '){
@@ -182,13 +213,14 @@ long long leerNumero(){ //Se valida la entrada de numeros
     else if(cin.fail()){
         cin.clear();
         cin.ignore(numeric_limits<int>::max(),'\n');
-        cout << "Erro al leer el numero, vuelve a intentar" << endl;
+        cout << "Error al leer el numero, vuelve a intentar" << endl;
         return leerNumero();
     }
 }
 Usuario registrarUsuario(vector <Usuario> usuarios){ //Pide la entrada de un usuario para registrarlo en archivos
     Usuario usuario;
     cin >> usuario;
+
     int tam;
     int id;
     if(usuarios.empty()){
