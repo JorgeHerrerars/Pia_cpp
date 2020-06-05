@@ -125,7 +125,8 @@ int leerInt();
 vector <Usuario> leerUsuariosF();
 Usuario registrarUsuario(vector<Usuario>);
 void guardarUsuariosF(vector <Usuario>);
-bool sesion(vector <Usuario>);
+Usuario sesion(vector <Usuario>);
+
 int main(){
     char decision;
     vector <Usuario> usuarios;
@@ -142,9 +143,13 @@ int main(){
             switch(decision){
             case 'i':
                 {
-                    if(sesion(usuarios)){
+                    if(!sesion(usuarios).getUser().empty()){
+                        Usuario usuario = sesion(usuarios);
                         cout << "(a)Agregar contactos" << endl;
-
+                        cout << "(m)Mostrar contactos" << endl;
+                        cout << "(e)Eliminar contacto" << endl;
+                        cout << "(b)Buscar contacto" << endl;
+                        cout << "(s)Cerrar sesion" << endl;
                     }
                 }
                 break;
@@ -186,9 +191,11 @@ int main(){
     }
 }
 
-bool sesion(vector <Usuario> usuarios){ //Valida una sesión existente
+Usuario sesion(vector <Usuario> usuarios){ //Valida una sesión existente
     string user,pass;
+    Usuario usuarioE;
     bool coincide = false;
+
     cout << "Username:" << endl;
     cin.ignore();
     getline(cin, user);
@@ -198,9 +205,11 @@ bool sesion(vector <Usuario> usuarios){ //Valida una sesión existente
         if(user == u.getUser() && pass == u.getPass()){
             coincide = true;
             cout << "Bienvenido " << user << endl;
+            usuarioE = u;
             break;
         }else{
             if(user == u.getUser()){
+                coincide = true;
                 cout << "Password equivocado" << endl;
                 break;
             }
@@ -209,7 +218,7 @@ bool sesion(vector <Usuario> usuarios){ //Valida una sesión existente
     if(!coincide){
         cout << "La sesion que ingreso no existe aun" << endl;
     }
-    return coincide;
+    return usuarioE;
 }
 int leerInt(){ //Valida le entrada
     int x;
