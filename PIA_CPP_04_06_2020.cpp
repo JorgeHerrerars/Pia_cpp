@@ -20,8 +20,10 @@ struct Contacto{
     string direccion;
     string descrip;
 };
+//PROTOTIPO DE OPERADORES DE CONTACTO
 istream& operator>> (istream&,Contacto&);
 ostream& operator<< (ostream&,Contacto&);
+//CLASE USUARIO (INCLUYE FUNCIONES PARA SUS CONTACTOS)
 class Usuario{
 private:
     int id;
@@ -101,8 +103,10 @@ public:
         return x;
     }
 };
+//PROTOTIPO DE OPERADORES DE USUARIO
 istream& operator>> (istream&,Usuario&);
 ostream& operator<< (ostream&,Usuario&);
+//EXCEPCIONES PROPIAS
 class ExcepcionCaracteres{
 public:
     ExcepcionCaracteres(){}
@@ -115,7 +119,7 @@ class ExcepcionNoCorreo{
 public:
     ExcepcionNoCorreo(){}
 };
-
+//PROTOTIPOS DE FUNCIONES
 long long verificarNumero();
 vector <Usuario> leerUsuariosF();
 Usuario registrarUsuario(vector<Usuario>);
@@ -125,7 +129,7 @@ int main(){
     vector <Usuario> usuarios;
     try{
         do{
-            //usuarios = leerUsuariosF();
+            usuarios = leerUsuariosF();
             cout << "PRODUCTO INTEGRADOR" << endl;
             cout << "(l)Iniciar sesion" << endl;
             cout << "(r)Registrarse" << endl;
@@ -148,7 +152,6 @@ int main(){
                 break;
             case 'p':
                 {
-                    //usuarios = leerUsuariosF();
                     for(Usuario u:usuarios){
                         cout << u << endl;
                     }
@@ -183,7 +186,7 @@ long long leerNumero(){ //Se valida la entrada de numeros
         return leerNumero();
     }
 }
-Usuario registrarUsuario(vector <Usuario> usuarios){ //Pide la entrada de un usuario
+Usuario registrarUsuario(vector <Usuario> usuarios){ //Pide la entrada de un usuario para registrarlo en archivos
     Usuario usuario;
     cin >> usuario;
     int tam;
@@ -209,7 +212,7 @@ vector <Usuario> leerUsuariosF(){ //En esta función se buscan los archivos de us
     string user = "";
     string pass = "";
     int id = 0;
-    if(ifs.is_open() && ifs.is_open()){
+    if(ifs.is_open() && ifs2.is_open()){
         while(!ifs.eof()){
             getline(ifs,auxiliar);
             if(!auxiliar.empty()){
@@ -235,13 +238,13 @@ vector <Usuario> leerUsuariosF(){ //En esta función se buscan los archivos de us
                             contacto.nombre = auxiliar2.substr(auxiliar2.find("Nombre:")+7);
                         }
                         if(auxiliar2.find("Celular:")!=string::npos){
-                            contacto.celular = stol(auxiliar2.substr(auxiliar2.find("Celular:")+8));
+                            contacto.celular = stoll(auxiliar2.substr(auxiliar2.find("Celular:")+8));
                         }
                         if(auxiliar2.find("Telefono de casa:")!=string::npos){
-                            contacto.telefonoC = stol(auxiliar2.substr(auxiliar2.find("Telefono de casa:")+17));
+                            contacto.telefonoC = stoll(auxiliar2.substr(auxiliar2.find("Telefono de casa:")+17));
                         }
                         if(auxiliar2.find("Telefono de trabajo:")!=string::npos){
-                            contacto.telefonoT = stol(auxiliar2.substr(auxiliar2.find("Telefono de trabajo:")+20));
+                            contacto.telefonoT = stoll(auxiliar2.substr(auxiliar2.find("Telefono de trabajo:")+20));
                         }
                         if(auxiliar2.find("Correo:")!=string::npos){
                             contacto.correo = auxiliar2.substr(auxiliar2.find("Correo:")+7);
@@ -264,9 +267,6 @@ vector <Usuario> leerUsuariosF(){ //En esta función se buscan los archivos de us
                 }
             }
         }
-    }else{
-        ofstream ofs ("usuarios.txt");
-        ofstream ofs2 ("contactos.txt");
     }
     return usuarios;
 }
@@ -280,7 +280,7 @@ void guardarUsuariosF(vector <Usuario> usuarios){
             << "Password:" << u.getPass() << endl
             << "**********" << endl;
             for(Contacto c:u.getContactos()){
-                ofs2 << "UID:" <<  c.userid << endl
+                ofs2 << "UID:" <<  u.getId() << endl
                 << "ID:" << c.id << endl
                 << "Nombre:" << c.nombre << endl
                 << "Celular:" << c.celular << endl
