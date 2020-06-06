@@ -168,6 +168,7 @@ int main(){
                         cout << "(b)Buscar contacto" << endl;
                         cout << "(s)Cerrar sesion" << endl;
                         cin >> decision2;
+                        system("CLS");
                         switch(decision2){
                         case 'a':
                             {
@@ -199,6 +200,7 @@ int main(){
                                 int contador = 0;
                                 cout << "Ingresa el id del contacto a eliminar" << endl;
                                 idBuscado = leerInt();
+                                system("CLS");
                                 for(Contacto c:usuario.getContactos()){
                                     if(c.id == idBuscado){
                                         encontrado = true;
@@ -234,6 +236,7 @@ int main(){
                                 bool encontrado = false;
                                 cout << "Ingresa el id del contacto que buscas" << endl;
                                 idBuscado = leerInt();
+                                system("CLS");
                                 for(Contacto c:usuario.getContactos()){
                                     if(c.id == idBuscado){
                                         encontrado = true;
@@ -271,6 +274,7 @@ int main(){
                     bool encontrado = false;
                     cout << "ID del usuario a buscar:";
                     idBuscado = leerInt();
+                    system("CLS");
                     for(Usuario u:usuarios){
                         if(u.getId() == idBuscado){
                             encontrado = true;
@@ -284,6 +288,7 @@ int main(){
                 }
             break;
             case 's':
+                cout << "Nos vemos!" << endl;
             break;
             default:
                 cout << "Lo sentimos, aun no contamos con esa opcion" << endl;
@@ -307,6 +312,7 @@ Usuario sesion(vector <Usuario> usuarios){ //Valida una sesion existente
     getline(cin, user);
     cout << "Password:" << endl;
     getline(cin,passIn);
+    system("CLS");
     for(Usuario u:usuarios){
 
     size_t hash_passI = hash_fn(passIn);
