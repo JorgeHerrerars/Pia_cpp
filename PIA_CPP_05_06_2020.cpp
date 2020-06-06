@@ -8,7 +8,7 @@
 #include <string>
 using namespace std;
 
-
+//ESTRUCTURA CONTACTO
 struct Contacto{
     int userid;
     int id;
@@ -181,12 +181,57 @@ int main(){
                         break;
                         case 'e':
                             {
+                                int idBuscado;
+                                bool encontrado = false;
+                                int contador = 0;
+                                cout << "Ingresa el id del contacto a eliminar" << endl;
+                                idBuscado = leerInt();
+                                for(Contacto c:usuario.getContactos()){
+                                    if(c.id == idBuscado){
+                                        encontrado = true;
+                                        vector <Contacto> contactos = usuario.getContactos();
+                                        contactos.erase(contactos.begin()+contador);
+                                        usuario.setContactos(contactos);
+                                        cout << c << endl;
+                                        cout << "^^Este contacto fue eliminado^^"<<endl;
+                                    }else{
+                                        contador++;
+                                    }
+                                }
+                                if(!encontrado){
+                                    cout << "No se encontro el contacto deseado" << endl;
+                                }
+                                //cout << usuario << endl;
+                                contador = 0;
+                                for(Usuario u:usuarios){
+                                    if(u.getId() == usuario.getId()){
+                                        usuarios[contador] = usuario;
+                                    }else{
+                                        contador++;
+                                    }
+                                }
+                                guardarUsuariosF(usuarios);
 
                             }
                         break;
                         case 'b':
                             {
-
+                                int idBuscado;
+                                int contador = 0;
+                                bool encontrado = false;
+                                cout << "Ingresa el id del contacto que buscas" << endl;
+                                idBuscado = leerInt();
+                                for(Contacto c:usuario.getContactos()){
+                                    if(c.id == idBuscado){
+                                        encontrado = true;
+                                        cout << c << endl;
+                                    }else{
+                                        contador++;
+                                    }
+                                }
+                                if(!encontrado){
+                                    cout << "No se encontro el contacto deseado" << endl;
+                                }
                             }
                         break;
                         }
@@ -531,7 +576,9 @@ istream& operator>> (istream& is, Contacto& contacto){ //Operador para ingresar 
     return is;
 }
 ostream& operator<< (ostream& os, Contacto& contacto){ //Operador para mostrar Contacto
-    os <<"Nombre:"<<contacto.nombre<<endl
+    os <<"UID:"<<contacto.userid<<endl
+    <<"ID:"<<contacto.id<<endl
+    <<"Nombre:"<<contacto.nombre<<endl
     <<"Celular:"<<contacto.celular<<endl
     <<"Telefono de casa:"<<contacto.telefonoC<<endl
     <<"Telefono de trabajo:"<<contacto.telefonoT<<endl
