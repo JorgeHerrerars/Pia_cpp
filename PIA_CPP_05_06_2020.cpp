@@ -6,10 +6,58 @@
 #include <typeinfo>
 #include <fstream>
 #include <string>
-#include <sstream>
+#include <locale.h>
 using namespace std;
 
-//ESTRUCTURA CONTACTO
+
+//!CAMBIAR VALIDACIONES A REGEX
+//!AGREGAR MANEJO DE ARCHIVOS
+//!FUNCIONES FRIEND
+
+
+//!AÑADIR UNA SECCION CON MATRIZ DINAMICA
+//!AÑADOR PARALELISMO
+//!AÑADIR UNA PLANTILLA DE FUNCION EN ALGUN LADO
+//!AÑADIR EXCEPCIONES
+
+//!AÑADIR PUNTEROS
+
+
+/*
+______OBLIGATORIO____________
+FUNCIONES
+MANEJO DE EXCEPXIONES 5
+SALIDA DE DATOS CON FORMATO 2.5
+
+__OBLIGATORIO PERO AUN NO HECHO___
+
+MANEJO DE ARCHIVOS 20
+
+______YA PUESTO_____________
+
+ESTRUCTURAS 2.5
+CLASES 5
+OP SOBRECARGADOS 5
+CLASE VECTOR 10   //CHECK
+
+____POR PONER FACIL DE IMPLEMENTAR_________
+
+FUNCIONES FRIEND 5
+PLANTILLAS 5
+
+PARALELISMO 15
+
+
+___POR PONER DIFICIL________
+
+PUNTEROS 5
+
+
+DA UN TOTAL DE 90
+*/
+
+
+
 struct Contacto{
     int userid;
     int id;
@@ -21,10 +69,8 @@ struct Contacto{
     string direccion;
     string descrip;
 };
-//PROTOTIPO DE OPERADORES DE CONTACTO
 istream& operator>> (istream&,Contacto&);
 ostream& operator<< (ostream&,Contacto&);
-//CLASE USUARIO (INCLUYE FUNCIONES PARA SUS CONTACTOS)
 class Usuario{
 private:
     int id;
@@ -71,7 +117,6 @@ public:
         }else{
             nuevo.id = contactos[contactos.size()-1].id+1;
         }
-        nuevo.userid = id;
         nuevos.push_back(nuevo);
         return nuevos;
     }
@@ -104,10 +149,8 @@ public:
         return x;
     }
 };
-//PROTOTIPO DE OPERADORES DE USUARIO
 istream& operator>> (istream&,Usuario&);
 ostream& operator<< (ostream&,Usuario&);
-//EXCEPCIONES PROPIAS
 class ExcepcionCaracteres{
 public:
     ExcepcionCaracteres(){}
@@ -120,240 +163,66 @@ class ExcepcionNoCorreo{
 public:
     ExcepcionNoCorreo(){}
 };
-//PROTOTIPOS DE FUNCIONES
+
 long long verificarNumero();
-int leerInt();
 vector <Usuario> leerUsuariosF();
 Usuario registrarUsuario(vector<Usuario>);
-void guardarUsuariosF(vector <Usuario>);
-Usuario sesion(vector <Usuario>);
-void agregarContactos(Usuario&);
-hash<string> hash_fn;
-
-template<typename T>
-string ToString(T t) {
-
-  stringstream ss;
-
-  ss << t;
-
-  return ss.str();
-}
 
 int main(){
+    setlocale(LC_ALL, "spanish");
     char decision;
+    int sesiones = 0;
     vector <Usuario> usuarios;
     try{
         do{
-            usuarios = leerUsuariosF();
+            //usuarios = leerUsuarios();
             cout << "PRODUCTO INTEGRADOR" << endl;
-            cout << "(i)Iniciar sesion" << endl;
+            cout << "(l)Iniciar sesion" << endl;
             cout << "(r)Registrarse" << endl;
-            cout << "(m)Mostrar lista de usuarios" << endl;
-            cout << "(b)Buscar usuario" << endl;
-            cout << "(s)Salir" << endl;
+            cout << "(p)Mostrar lista de usuarios" << endl;
+            cout << "(s)Buscar usuario" << endl;
+            cout << "(e)Salir" << endl;
             cin >> decision;
-            system("CLS");
             switch(decision){
-            case 'i':
+            case 'l':
                 {
-                    Usuario usuario = sesion(usuarios);
-                    if(!usuario.getUser().empty()){
-                        char decision2;
-                        do{
-                        cout << "Que deseas hacer?" << endl;
-                        cout << "(a)Agregar contactos" << endl;
-                        cout << "(m)Mostrar contactos" << endl;
-                        cout << "(e)Eliminar contacto" << endl;
-                        cout << "(b)Buscar contacto" << endl;
-                        cout << "(s)Cerrar sesion" << endl;
-                        cin >> decision2;
-                        system("CLS");
-                        switch(decision2){
-                        case 'a':
-                            {
-                                int c = 0;
-                                cin.ignore();
-                                usuario.setContactos(usuario.agregarContacto());
-                                for(Usuario u:usuarios){
-                                    if(u.getId() == usuario.getId()){
-                                        usuarios[c] = usuario;
-                                    }else{
-                                        c++;
-                                    }
-                                }
-                                guardarUsuariosF(usuarios);
-                            }
-                        break;
-                        case 'm':
-                            {
-                                usuarios = leerUsuariosF();
-                                for(Contacto c:usuario.getContactos()){
-                                    cout << c << endl;
-                                }
-                            }
-                        break;
-                        case 'e':
-                            {
-                                int idBuscado;
-                                bool encontrado = false;
-                                int contador = 0;
-                                cout << "Ingresa el id del contacto a eliminar" << endl;
-                                idBuscado = leerInt();
-                                system("CLS");
-                                for(Contacto c:usuario.getContactos()){
-                                    if(c.id == idBuscado){
-                                        encontrado = true;
-                                        vector <Contacto> contactos = usuario.getContactos();
-                                        contactos.erase(contactos.begin()+contador);
-                                        usuario.setContactos(contactos);
-                                        cout << c << endl;
-                                        cout << "^^Este contacto fue eliminado^^"<<endl;
-                                    }else{
-                                        contador++;
-                                    }
-                                }
-                                if(!encontrado){
-                                    cout << "No se encontro el contacto deseado" << endl;
-                                }
-                                //cout << usuario << endl;
-                                contador = 0;
-                                for(Usuario u:usuarios){
-                                    if(u.getId() == usuario.getId()){
-                                        usuarios[contador] = usuario;
-                                    }else{
-                                        contador++;
-                                    }
-                                }
-                                guardarUsuariosF(usuarios);
+                    if(sesiones!=0){
+                        cout<<"Introduzca el nombre de usuario:"<<endl;
+                        cin>>userIn;
 
-                            }
-                        break;
-                        case 'b':
-                            {
-                                int idBuscado;
-                                int contador = 0;
-                                bool encontrado = false;
-                                cout << "Ingresa el id del contacto que buscas" << endl;
-                                idBuscado = leerInt();
-                                system("CLS");
-                                for(Contacto c:usuario.getContactos()){
-                                    if(c.id == idBuscado){
-                                        encontrado = true;
-                                        cout << c << endl;
-                                    }else{
-                                        contador++;
-                                    }
-                                }
-                                if(!encontrado){
-                                    cout << "No se encontro el contacto deseado" << endl;
-                                }
-                            }
-                        break;
-                        }
-                        }while(decision2 != 's');
+
+
                     }
                 }
-            break;
+                break;
             case 'r':
                 {
+                    cin.ignore();
                     usuarios.push_back(registrarUsuario(usuarios));
-                    guardarUsuariosF(usuarios);
+
                 }
-            break;
-            case 'm':
+                break;
+            case 'p':
                 {
                     for(Usuario u:usuarios){
                         cout << u << endl;
                     }
                 }
-            break;
-            case 'b':
-                {
-                    int idBuscado;
-                    bool encontrado = false;
-                    cout << "ID del usuario a buscar:";
-                    idBuscado = leerInt();
-                    system("CLS");
-                    for(Usuario u:usuarios){
-                        if(u.getId() == idBuscado){
-                            encontrado = true;
-                            cout << u << endl;
-                            break;
-                        }
-                    }
-                    if(!encontrado){
-                        cout << "Lo sentimos, no pudimos encontrar un usuario con ese ID" << endl;
-                    }
-                }
-            break;
+                break;
             case 's':
-                cout << "Nos vemos!" << endl;
-            break;
-            default:
-                cout << "Lo sentimos, aun no contamos con esa opcion" << endl;
-            }
-        }while(decision != 's');
-    }catch(...){
-        cout << "Error desconocido" << endl;
-    }
-}
-///DEFINICION DE FUNCIONES
-void agregarContactos (Usuario &usuario){
-    usuario.agregarContacto();
-}
-Usuario sesion(vector <Usuario> usuarios){ //Valida una sesion existente
-    string user,passIn,pass;
-    Usuario usuarioE;
-    bool coincide = false;
+                {
 
-    cout << "Username:" << endl;
-    cin.ignore();
-    getline(cin, user);
-    cout << "Password:" << endl;
-    getline(cin,passIn);
-    system("CLS");
-    for(Usuario u:usuarios){
-
-    size_t hash_passI = hash_fn(passIn);
-    pass = ToString<size_t>(hash_passI);
-        if(user == u.getUser() && pass == u.getPass()){
-            coincide = true;
-            cout << "Bienvenido " << user << endl;
-            usuarioE = u;
-            break;
-        }else{
-            if(user == u.getUser()){
-                coincide = true;
-                cout << "Password equivocado" << endl;
+                }
                 break;
             }
-        }
+        }while(decision != 'e');
+    }catch(...){
+
     }
-    if(!coincide){
-        cout << "La sesion que ingreso no existe aun" << endl;
-    }
-    return usuarioE;
 }
-int leerInt(){ //Valida le entrada
-    int x;
-    cin >> x;
-        if(cin.peek() != '\n' && cin.peek() != ' '){
-            cin.clear(ios::badbit);
-        }
-        if(cin.good())
-            return x;
-        //!si la entrada no fue correcta
-        else if (cin.fail()){
-            cin.clear(); // pone 0 a todos los indicadores de error
-            cin.ignore(numeric_limits<int>::max(),'\n'); /*!numeric_limits<int>::max()
-                                        retorna la maypr cant de digitos que almacena
-                                        un dato int*/
-            cout << "\nVuelve a intentarlo";
-            return leerInt();
-        }
-}
-long long leerNumero(){ //Se valida la entrada de numeros long long
+
+
+long long leerNumero(){ //Se valida la entrada de numeros
     long long num;
     cin >> num;
     if(cin.peek() != '\n' && cin.peek() != ' '){
@@ -365,13 +234,12 @@ long long leerNumero(){ //Se valida la entrada de numeros long long
     else if(cin.fail()){
         cin.clear();
         cin.ignore(numeric_limits<int>::max(),'\n');
-        cout << "Error al leer el numero, vuelve a intentar" << endl;
+        cout << "Erro al leer el numero, vuelve a intentar" << endl;
         return leerNumero();
     }
 }
-Usuario registrarUsuario(vector <Usuario> usuarios){ //Pide la entrada de un usuario para registrarlo en archivos
+Usuario registrarUsuario(vector <Usuario> usuarios){ //Pide la entrada de un usuario
     Usuario usuario;
-    cin.ignore();
     cin >> usuario;
     int tam;
     int id;
@@ -382,20 +250,15 @@ Usuario registrarUsuario(vector <Usuario> usuarios){ //Pide la entrada de un usu
         id = usuarios[tam].getId()+1;
         usuario.setId(id);
     }
-    for(Usuario u:usuarios){
-        if(u.getUser()==usuario.getUser()){
-            cout << "Lamentamos las molestias, pero este username ya esta ocupado" <<endl;
-            return registrarUsuario(usuarios);
-        }
-    }
     return usuario;
 }
-vector <Usuario> leerUsuariosF(){ //En esta funciï¿½n se buscan los archivos de usuarios y contactos para incluir todo en un vector de Usuarios*/
+vector <Usuario> leerUsuariosF(){ //En esta función se buscan los archivos de usuarios y contactos para incluir todo en un vector de Usuarios*/
     vector <Usuario> usuarios;
     vector <Contacto> contactos;
     Usuario usuario;
     Contacto contacto;
     ifstream ifs ("usuarios.txt");
+    ifstream ifs2 ("contactos.txt");
     string auxiliar = "";
     string auxiliar2 = "";
     string user = "";
@@ -411,88 +274,61 @@ vector <Usuario> leerUsuariosF(){ //En esta funciï¿½n se buscan los archivos de 
                 if(auxiliar.find("Username:")!=string::npos){
                     user = auxiliar.substr(auxiliar.find("Username:")+9);
                 }
-                if(auxiliar.find("Password(Encrypted):")!=string::npos){
-                    pass = auxiliar.substr(auxiliar.find("Password(Encrypted):")+20);
-
+                if(auxiliar.find("Password:")!=string::npos){
+                    pass = auxiliar.substr(auxiliar.find("Password:")+9);
                 }
                 if(auxiliar.find("**********")!=string::npos){
-                    ifstream ifs2 ("contactos.txt");
-                    if(ifs2.is_open()){
-                        while(!ifs2.eof()){
-                            getline(ifs2,auxiliar2);
-                            if(auxiliar2.find("UID:")!=string::npos){
-                                contacto.userid = stoi(auxiliar2.substr(auxiliar2.find("UID:")+4));
-                                //cout << "Encontre uno" << endl;
-                            }
-                            if(auxiliar2.find("ID:")!=string::npos){
-                                contacto.id = stoi(auxiliar2.substr(auxiliar2.find("ID:")+3));
-                            }
-                            if(auxiliar2.find("Nombre:")!=string::npos){
-                                contacto.nombre = auxiliar2.substr(auxiliar2.find("Nombre:")+7);
-                            }
-                            if(auxiliar2.find("Celular:")!=string::npos){
-                                contacto.celular = stoll(auxiliar2.substr(auxiliar2.find("Celular:")+8));
-                            }
-                            if(auxiliar2.find("Telefono de casa:")!=string::npos){
-                                contacto.telefonoC = stoll(auxiliar2.substr(auxiliar2.find("Telefono de casa:")+17));
-                            }
-                            if(auxiliar2.find("Telefono de trabajo:")!=string::npos){
-                                contacto.telefonoT = stoll(auxiliar2.substr(auxiliar2.find("Telefono de trabajo:")+20));
-                            }
-                            if(auxiliar2.find("Correo:")!=string::npos){
-                                contacto.correo = auxiliar2.substr(auxiliar2.find("Correo:")+7);
-                            }
-                            if(auxiliar2.find("Direccion:")!=string::npos){
-                                contacto.direccion = auxiliar2.substr(auxiliar2.find("Direccion:")+10);
-                            }
-                            if(auxiliar2.find("Descripcion:")!=string::npos){
-                                contacto.descrip = auxiliar2.substr(auxiliar2.find("Descripcion:")+12);
-                                //cout << "Encontre uno" << endl;
-                            }
-                            if(auxiliar2.find("**********")!=string::npos && contacto.userid == id){
-                                contactos.push_back(contacto);
-
-                                //cout << "Encontre uno" << endl;
-                            }
+                    while(!ifs2.eof()){
+                        getline(ifs2,auxiliar2);
+                        if(auxiliar2.find("UID:")!=string::npos){
+                            contacto.userid = stoi(auxiliar2.substr(auxiliar2.find("UID:")+4));
                         }
-                        usuario.setId(id);
-                        usuario.setUser(user);
-                        usuario.setPass(pass);
-                        usuario.setContactos(contactos);
-                        contactos.clear();
-                        usuarios.push_back(usuario);
+                        if(auxiliar2.find("ID:")!=string::npos){
+                            contacto.id = stoi(auxiliar2.substr(auxiliar2.find("ID:")+3));
+                        }
+                        if(auxiliar2.find("Nombre:")!=string::npos){
+                            contacto.nombre = auxiliar2.substr(auxiliar2.find("Nombre:")+7);
+                        }
+                        if(auxiliar2.find("Celular:")!=string::npos){
+                            contacto.celular = stol(auxiliar2.substr(auxiliar2.find("Celular:")+8));
+                        }
+                        if(auxiliar2.find("Telefono de casa:")!=string::npos){
+                            contacto.telefonoC = stol(auxiliar2.substr(auxiliar2.find("Telefono de casa:")+17));
+                        }
+                        if(auxiliar2.find("Telefono de trabajo:")!=string::npos){
+                            contacto.telefonoT = stol(auxiliar2.substr(auxiliar2.find("Telefono de trabajo:")+20));
+                        }
+                        if(auxiliar2.find("Correo:")!=string::npos){
+                            contacto.correo = auxiliar2.substr(auxiliar2.find("Correo:")+7);
+                        }
+                        if(auxiliar2.find("Direccion:")!=string::npos){
+                            contacto.direccion = auxiliar2.substr(auxiliar2.find("Direccion:")+10);
+                        }
+                        if(auxiliar2.find("Descripcion:")!=string::npos){
+                            contacto.descrip = auxiliar2.substr(auxiliar2.find("Descripcion:")+12);
+                        }
+                        if(auxiliar2.find("**********")!=string::npos && contacto.id == id){
+                            contactos.push_back(contacto);
+                        }
                     }
+                    usuario.setId(id);
+                    usuario.setUser(user);
+                    usuario.setPass(pass);
+                    usuario.setContactos(contactos);
+                    usuarios.push_back(usuario);
                 }
             }
         }
     }
     return usuarios;
 }
-void guardarUsuariosF(vector <Usuario> usuarios){
+int agregarUsuariosF(vector <Usuario> usuarios){
     ofstream ofs ("usuarios.txt");
     ofstream ofs2 ("contactos.txt");
-    if(!usuarios.empty()){
-        for(Usuario u:usuarios){
-            ofs << "User ID:" << u.getId() << endl
-            << "Username:" << u.getUser() << endl
-            << "Password(Encrypted):" << u.getPass() << endl
-            << "**********" << endl;
-            for(Contacto c:u.getContactos()){
-                ofs2 << "UID:" <<  u.getId() << endl
-                << "ID:" << c.id << endl
-                << "Nombre:" << c.nombre << endl
-                << "Celular:" << c.celular << endl
-                << "Telefono de casa:" << c.telefonoC << endl
-                << "Telefono de trabajo:" << c.telefonoT << endl
-                << "Correo:" << c.correo << endl
-                << "Direccion:" << c.direccion << endl
-                << "Descripcion:" << c.descrip << endl
-                << "**********" << endl;
-            }
-        }
+    for(Usuario u:usuarios){
+
     }
 }
-///DEFINICION DE OPERADORES
 istream& operator>> (istream& is, Contacto& contacto){ //Operador para ingresar Contacto
     bool entradaCorrecta = false;
     do{
@@ -602,9 +438,7 @@ istream& operator>> (istream& is, Contacto& contacto){ //Operador para ingresar 
     return is;
 }
 ostream& operator<< (ostream& os, Contacto& contacto){ //Operador para mostrar Contacto
-    os <<"UID:"<<contacto.userid<<endl
-    <<"ID:"<<contacto.id<<endl
-    <<"Nombre:"<<contacto.nombre<<endl
+    os <<"Nombre:"<<contacto.nombre<<endl
     <<"Celular:"<<contacto.celular<<endl
     <<"Telefono de casa:"<<contacto.telefonoC<<endl
     <<"Telefono de trabajo:"<<contacto.telefonoT<<endl
@@ -616,7 +450,7 @@ ostream& operator<< (ostream& os, Contacto& contacto){ //Operador para mostrar C
 istream& operator>> (istream& is, Usuario& usuario){ //Operador para ingresas Usuario
     bool entradaCorrecta = false;
     string u = "";
-    string pIn = "";
+    string p = "";
     char d;
     vector <Contacto> c;
     do{
@@ -637,13 +471,11 @@ istream& operator>> (istream& is, Usuario& usuario){ //Operador para ingresas Us
     do{
         try{
             cout << "Password:" <<endl;
-            getline(is,pIn);
+            getline(is,p);
             if(u.length()<=0){
                 throw ExcepcionCaracteres();
             }else{
                 entradaCorrecta = true;
-                size_t hash_pass = hash_fn(pIn);
-                string p = ToString<size_t>(hash_pass);
                 usuario.setPass(p);
             }
         }catch(ExcepcionCaracteres e){
