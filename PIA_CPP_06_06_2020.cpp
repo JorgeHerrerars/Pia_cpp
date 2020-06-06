@@ -129,9 +129,8 @@ vector <Usuario> leerUsuariosF();
 Usuario registrarUsuario(vector<Usuario>);
 void guardarUsuariosF(vector <Usuario>);
 Usuario sesion(vector <Usuario>);
-void agregarContactos(Usuario&);
 hash<string> hash_fn;
-
+//USO DE PLANTILLA
 template<typename T>
 string ToString(T t) {
 
@@ -301,9 +300,6 @@ int main(){
     }
 }
 ///DEFINICION DE FUNCIONES
-void agregarContactos (Usuario &usuario){
-    usuario.agregarContacto();
-}
 Usuario sesion(vector <Usuario> usuarios){ //Valida una sesion existente
     string user,passIn,pass;
     Usuario usuarioE;
