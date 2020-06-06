@@ -6,6 +6,7 @@
 #include <typeinfo>
 #include <fstream>
 #include <string>
+#include <sstream>
 using namespace std;
 
 //ESTRUCTURA CONTACTO
@@ -127,6 +128,17 @@ Usuario registrarUsuario(vector<Usuario>);
 void guardarUsuariosF(vector <Usuario>);
 Usuario sesion(vector <Usuario>);
 void agregarContactos(Usuario&);
+hash<string> hash_fn;
+
+template<typename T>
+string ToString(T t) {
+
+  stringstream ss;
+
+  ss << t;
+
+  return ss.str();
+}
 
 int main(){
     char decision;
@@ -270,6 +282,8 @@ int main(){
                     }
                 }
             break;
+            case 's':
+            break;
             default:
                 cout << "Lo sentimos, aun no contamos con esa opcion" << endl;
             }
@@ -283,7 +297,7 @@ void agregarContactos (Usuario &usuario){
     usuario.agregarContacto();
 }
 Usuario sesion(vector <Usuario> usuarios){ //Valida una sesión existente
-    string user,pass;
+    string user,passIn,pass;
     Usuario usuarioE;
     bool coincide = false;
 
@@ -291,8 +305,11 @@ Usuario sesion(vector <Usuario> usuarios){ //Valida una sesión existente
     cin.ignore();
     getline(cin, user);
     cout << "Password:" << endl;
-    getline(cin,pass);
+    getline(cin,passIn);
     for(Usuario u:usuarios){
+
+    size_t hash_passI = hash_fn(passIn);
+    pass = ToString<size_t>(hash_passI);
         if(user == u.getUser() && pass == u.getPass()){
             coincide = true;
             cout << "Bienvenido " << user << endl;
@@ -389,6 +406,7 @@ vector <Usuario> leerUsuariosF(){ //En esta función se buscan los archivos de us
                 }
                 if(auxiliar.find("Password:")!=string::npos){
                     pass = auxiliar.substr(auxiliar.find("Password:")+9);
+
                 }
                 if(auxiliar.find("**********")!=string::npos){
                     ifstream ifs2 ("contactos.txt");
@@ -450,7 +468,7 @@ void guardarUsuariosF(vector <Usuario> usuarios){
         for(Usuario u:usuarios){
             ofs << "User ID:" << u.getId() << endl
             << "Username:" << u.getUser() << endl
-            << "Password:" << u.getPass() << endl
+            << "Password(Encrypted):" << u.getPass() << endl
             << "**********" << endl;
             for(Contacto c:u.getContactos()){
                 ofs2 << "UID:" <<  u.getId() << endl
@@ -590,7 +608,7 @@ ostream& operator<< (ostream& os, Contacto& contacto){ //Operador para mostrar C
 istream& operator>> (istream& is, Usuario& usuario){ //Operador para ingresas Usuario
     bool entradaCorrecta = false;
     string u = "";
-    string p = "";
+    string pIn = "";
     char d;
     vector <Contacto> c;
     do{
@@ -611,11 +629,13 @@ istream& operator>> (istream& is, Usuario& usuario){ //Operador para ingresas Us
     do{
         try{
             cout << "Password:" <<endl;
-            getline(is,p);
+            getline(is,pIn);
             if(u.length()<=0){
                 throw ExcepcionCaracteres();
             }else{
                 entradaCorrecta = true;
+                size_t hash_pass = hash_fn(pIn);
+                string p = ToString<size_t>(hash_pass);
                 usuario.setPass(p);
             }
         }catch(ExcepcionCaracteres e){
