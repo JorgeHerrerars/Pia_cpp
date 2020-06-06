@@ -153,6 +153,7 @@ int main(){
             cout << "(b)Buscar usuario" << endl;
             cout << "(s)Salir" << endl;
             cin >> decision;
+            system("CLS");
             switch(decision){
             case 'i':
                 {
@@ -292,11 +293,11 @@ int main(){
         cout << "Error desconocido" << endl;
     }
 }
-
+///DEFINICION DE FUNCIONES
 void agregarContactos (Usuario &usuario){
     usuario.agregarContacto();
 }
-Usuario sesion(vector <Usuario> usuarios){ //Valida una sesión existente
+Usuario sesion(vector <Usuario> usuarios){ //Valida una sesion existente
     string user,passIn,pass;
     Usuario usuarioE;
     bool coincide = false;
@@ -383,7 +384,7 @@ Usuario registrarUsuario(vector <Usuario> usuarios){ //Pide la entrada de un usu
     }
     return usuario;
 }
-vector <Usuario> leerUsuariosF(){ //En esta función se buscan los archivos de usuarios y contactos para incluir todo en un vector de Usuarios*/
+vector <Usuario> leerUsuariosF(){ //En esta funciï¿½n se buscan los archivos de usuarios y contactos para incluir todo en un vector de Usuarios*/
     vector <Usuario> usuarios;
     vector <Contacto> contactos;
     Usuario usuario;
@@ -404,8 +405,8 @@ vector <Usuario> leerUsuariosF(){ //En esta función se buscan los archivos de us
                 if(auxiliar.find("Username:")!=string::npos){
                     user = auxiliar.substr(auxiliar.find("Username:")+9);
                 }
-                if(auxiliar.find("Password:")!=string::npos){
-                    pass = auxiliar.substr(auxiliar.find("Password:")+9);
+                if(auxiliar.find("Password(Encrypted):")!=string::npos){
+                    pass = auxiliar.substr(auxiliar.find("Password(Encrypted):")+20);
 
                 }
                 if(auxiliar.find("**********")!=string::npos){
@@ -485,6 +486,7 @@ void guardarUsuariosF(vector <Usuario> usuarios){
         }
     }
 }
+///DEFINICION DE OPERADORES
 istream& operator>> (istream& is, Contacto& contacto){ //Operador para ingresar Contacto
     bool entradaCorrecta = false;
     do{
