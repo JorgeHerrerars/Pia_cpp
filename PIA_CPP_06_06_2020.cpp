@@ -140,136 +140,147 @@ string ToString(T t) {
 
   return ss.str();
 }
-
 int main(){
-    char decision;
+    int decision;
     vector <Usuario> usuarios;
     try{
         do{
             usuarios = leerUsuariosF();
             cout << setw(22) << "PRODUCTO INTEGRADOR" << endl;
-            cout << "(i)"<<setw(16)<<"Iniciar sesion" << endl;
-            cout << "(r)"<<setw(13)<<"Registrarse" << endl;
-            cout << "(m)"<<setw(27)<<"Mostrar lista de usuarios" << endl;
-            cout << "(b)"<<setw(16)<<"Buscar usuario" << endl;
-            cout << "(s)"<<setw(7)<<"Salir" << endl;
-            cin >> decision;
+            cout << "(1)"<<setw(16)<<"Iniciar sesion" << endl;
+            cout << "(2)"<<setw(13)<<"Registrarse" << endl;
+            cout << "(3)"<<setw(27)<<"Mostrar lista de usuarios" << endl;
+            cout << "(4)"<<setw(16)<<"Buscar usuario" << endl;
+            cout << "(0)"<<setw(7)<<"Salir" << endl;
+            decision = leerInt();
             system("CLS");
             switch(decision){
-            case 'i':
+            case 1:
                 {
                     Usuario usuario = sesion(usuarios);
                     if(!usuario.getUser().empty()){
-                        char decision2;
+                        int decision2;
                         do{
-                        cout << setw(20) <<"Que deseas hacer?" << endl;
-                        cout << "(a)" <<setw(19)<<"Agregar contactos" << endl;
-                        cout << "(m)"<<setw(19)<<"Mostrar contactos" << endl;
-                        cout << "(e)"<<setw(19)<<"Eliminar contacto" << endl;
-                        cout << "(b)"<<setw(17)<<"Buscar contacto" << endl;
-                        cout << "(s)"<<setw(15)<<"Cerrar sesion" << endl;
-                        cin >> decision2;
-                        system("CLS");
-                        switch(decision2){
-                        case 'a':
-                            {
-                                int c = 0;
-                                cin.ignore();
-                                usuario.setContactos(usuario.agregarContacto());
-                                for(Usuario u:usuarios){
-                                    if(u.getId() == usuario.getId()){
-                                        usuarios[c] = usuario;
+                            cout << setw(20) <<"Que deseas hacer?" << endl;
+                            cout << "(1)" <<setw(19)<<"Agregar contactos" << endl;
+                            cout << "(2)"<<setw(19)<<"Mostrar contactos" << endl;
+                            cout << "(3)"<<setw(19)<<"Eliminar contacto" << endl;
+                            cout << "(4)"<<setw(17)<<"Buscar contacto" << endl;
+                            cout << "(0)"<<setw(15)<<"Cerrar sesion" << endl;
+                            decision2 = leerInt();
+                            system("CLS");
+                            switch(decision2){
+                            case 1:
+                                {
+                                    int c = 0;
+                                    cin.ignore();
+                                    usuario.setContactos(usuario.agregarContacto());
+                                    for(Usuario u:usuarios){
+                                        if(u.getId() == usuario.getId()){
+                                            usuarios[c] = usuario;
+                                        }else{
+                                            c++;
+                                        }
+                                    }
+                                    guardarUsuariosF(usuarios);
+                                }
+                            break;
+                            case 2:
+                                {
+                                    usuarios = leerUsuariosF();
+                                    if(!usuario.getContactos().empty()){
+                                        for(Contacto c:usuario.getContactos()){
+                                            cout << c << endl;
+                                        }
                                     }else{
-                                        c++;
+                                        cout << "No tienes contactos aun" << endl;
                                     }
                                 }
-                                guardarUsuariosF(usuarios);
-                            }
-                        break;
-                        case 'm':
-                            {
-                                usuarios = leerUsuariosF();
-                                for(Contacto c:usuario.getContactos()){
-                                    cout << c << endl;
-                                }
-                            }
-                        break;
-                        case 'e':
-                            {
-                                int idBuscado;
-                                bool encontrado = false;
-                                int contador = 0;
-                                cout << "Ingresa el id del contacto a eliminar" << endl;
-                                idBuscado = leerInt();
-                                system("CLS");
-                                for(Contacto c:usuario.getContactos()){
-                                    if(c.id == idBuscado){
-                                        encontrado = true;
-                                        vector <Contacto> contactos = usuario.getContactos();
-                                        contactos.erase(contactos.begin()+contador);
-                                        usuario.setContactos(contactos);
-                                        cout << c << endl;
-                                        cout << "^^Este contacto fue eliminado^^"<<endl;
-                                    }else{
-                                        contador++;
+                            break;
+                            case 3:
+                                {
+                                    int idBuscado;
+                                    bool encontrado = false;
+                                    int contador = 0;
+                                    cout << "Ingresa el id del contacto a eliminar" << endl;
+                                    idBuscado = leerInt();
+                                    system("CLS");
+                                    for(Contacto c:usuario.getContactos()){
+                                        if(c.id == idBuscado){
+                                            encontrado = true;
+                                            vector <Contacto> contactos = usuario.getContactos();
+                                            contactos.erase(contactos.begin()+contador);
+                                            usuario.setContactos(contactos);
+                                            cout << c << endl;
+                                            cout << "^^Este contacto fue eliminado^^"<<endl;
+                                        }else{
+                                            contador++;
+                                        }
                                     }
-                                }
-                                if(!encontrado){
-                                    cout << "No se encontro el contacto deseado" << endl;
-                                }
-                                //cout << usuario << endl;
-                                contador = 0;
-                                for(Usuario u:usuarios){
-                                    if(u.getId() == usuario.getId()){
-                                        usuarios[contador] = usuario;
-                                    }else{
-                                        contador++;
+                                    if(!encontrado){
+                                        cout << "No se encontro el contacto deseado" << endl;
                                     }
-                                }
-                                guardarUsuariosF(usuarios);
+                                    //cout << usuario << endl;
+                                    contador = 0;
+                                    for(Usuario u:usuarios){
+                                        if(u.getId() == usuario.getId()){
+                                            usuarios[contador] = usuario;
+                                        }else{
+                                            contador++;
+                                        }
+                                    }
+                                    guardarUsuariosF(usuarios);
 
-                            }
-                        break;
-                        case 'b':
-                            {
-                                int idBuscado;
-                                int contador = 0;
-                                bool encontrado = false;
-                                cout << "Ingresa el id del contacto que buscas" << endl;
-                                idBuscado = leerInt();
-                                system("CLS");
-                                for(Contacto c:usuario.getContactos()){
-                                    if(c.id == idBuscado){
-                                        encontrado = true;
-                                        cout << c << endl;
-                                    }else{
-                                        contador++;
+                                }
+                            break;
+                            case 4:
+                                {
+                                    int idBuscado;
+                                    int contador = 0;
+                                    bool encontrado = false;
+                                    cout << "Ingresa el id del contacto que buscas" << endl;
+                                    idBuscado = leerInt();
+                                    system("CLS");
+                                    for(Contacto c:usuario.getContactos()){
+                                        if(c.id == idBuscado){
+                                            encontrado = true;
+                                            cout << c << endl;
+                                        }else{
+                                            contador++;
+                                        }
+                                    }
+                                    if(!encontrado){
+                                        cout << "No se encontro el contacto deseado" << endl;
                                     }
                                 }
-                                if(!encontrado){
-                                    cout << "No se encontro el contacto deseado" << endl;
+                            break;
+                            case 0:
+                                {
+                                    cout << "Nos vemos " << usuario.getUser() << endl;
                                 }
                             }
-                        break;
-                        }
-                        }while(decision2 != 's');
+                        }while(decision2 != 0);
                     }
                 }
             break;
-            case 'r':
+            case 2:
                 {
                     usuarios.push_back(registrarUsuario(usuarios));
                     guardarUsuariosF(usuarios);
                 }
             break;
-            case 'm':
+            case 3:
                 {
-                    for(Usuario u:usuarios){
-                        cout << u << endl;
+                    if(!usuarios.empty()){
+                        for(Usuario u:usuarios){
+                            cout << u << endl;
+                        }
+                    }else{
+                        cout << "Aun no hay usuarios registrados" << endl;
                     }
                 }
             break;
-            case 'b':
+            case 4:
                 {
                     int idBuscado;
                     bool encontrado = false;
@@ -288,13 +299,13 @@ int main(){
                     }
                 }
             break;
-            case 's':
+            case 0:
                 cout << "Nos vemos!" << endl;
             break;
             default:
                 cout << "Lo sentimos, aun no contamos con esa opcion" << endl;
             }
-        }while(decision != 's');
+        }while(decision != 0);
     }catch(...){
         cout << "Error desconocido" << endl;
     }
@@ -347,7 +358,7 @@ int leerInt(){ //Valida le entrada
             cin.ignore(numeric_limits<int>::max(),'\n'); /*!numeric_limits<int>::max()
                                         retorna la maypr cant de digitos que almacena
                                         un dato int*/
-            cout << "\nVuelve a intentarlo";
+            cout << "\nVuelve a intentarlo (Solo se aceptan valores enteros)" << endl;
             return leerInt();
         }
 }
