@@ -13,13 +13,10 @@ using namespace std;
 
 /*
             INTEGRANTES DEL EQUIPO
-
     VICTORIA ESTEFANIA VAZQUEZ PEREZ 	1863957
     JORGE ALEJANDRO HERRERA RAMOS	    1863060
     VICTOR GIANCARLO LIMON LOPEZ	    1843933
     JOSE DE JESUS ARAUJO CERDA		    1856022
-
-
 */
 
 
@@ -141,7 +138,6 @@ vector <Usuario> leerUsuariosF();
 Usuario registrarUsuario(vector<Usuario>);
 void guardarUsuariosF(vector <Usuario>);
 Usuario sesion(vector <Usuario>);
-hash<string> hash_fn;
 //USO DE PLANTILLA
 template<typename T>
 string ToString(T t) {
@@ -343,6 +339,14 @@ int main(){
     }
 }
 ///DEFINICION DE FUNCIONES
+string getHash(string cadena){
+    string cadenaH;
+    hash <string> hashFn;
+    size_t hashVar;
+    hashVar = hashFn(cadena);
+    cadenaH = ToString<size_t>(hashVar);
+    return cadenaH;
+}
 Usuario sesion(vector <Usuario> usuarios){ //Valida una sesion existente
     string user,passIn,pass;
     Usuario usuarioE;
@@ -354,10 +358,8 @@ Usuario sesion(vector <Usuario> usuarios){ //Valida una sesion existente
     cout << "Password:" << endl;
     getline(cin,passIn);
     system("CLS");
+    pass = getHash(passIn);
     for(Usuario u:usuarios){
-
-    size_t hash_passI = hash_fn(passIn);
-    pass = ToString<size_t>(hash_passI);
         if(user == u.getUser() && pass == u.getPass()){
             coincide = true;
             cout << "Bienvenido " << user << endl;
@@ -669,6 +671,7 @@ istream& operator>> (istream& is, Usuario& usuario){ //Operador para ingresas Us
     bool entradaCorrecta = false;
     string u = "";
     string pIn = "";
+    string p = "";
     char d;
     vector <Contacto> c;
     do{
@@ -694,8 +697,7 @@ istream& operator>> (istream& is, Usuario& usuario){ //Operador para ingresas Us
                 throw ExcepcionCaracteres();
             }else{
                 entradaCorrecta = true;
-                size_t hash_pass = hash_fn(pIn);
-                string p = ToString<size_t>(hash_pass);
+                p = getHash(pIn);
                 usuario.setPass(p);
             }
         }catch(ExcepcionCaracteres e){
