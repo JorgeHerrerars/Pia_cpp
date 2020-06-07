@@ -11,6 +11,18 @@
 #include <thread>
 using namespace std;
 
+/*
+            INTEGRANTES DEL EQUIPO
+
+    VICTORIA ESTEFANIA VAZQUEZ PEREZ 	1863957
+    JORGE ALEJANDRO HERRERA RAMOS	    1863060
+    VICTOR GIANCARLO LIMON LOPEZ	    1843933
+    JOSE DE JESUS ARAUJO CERDA		    1856022
+
+
+*/
+
+
 //ESTRUCTURA CONTACTO
 struct Contacto{
     int userid;
@@ -199,9 +211,11 @@ int main(){
                             break;
                             case 3:
                                 {
+                                    try{
                                     int idBuscado;
                                     bool encontrado = false;
                                     int contador = 0;
+                                    if(!usuario.getContactos().empty()){
                                     cout << "Ingresa el id del contacto a eliminar" << endl;
                                     idBuscado = leerInt();
                                     system("CLS");
@@ -218,7 +232,7 @@ int main(){
                                         }
                                     }
                                     if(!encontrado){
-                                        cout << "No se encontro el contacto deseado" << endl;
+                                        throw out_of_range("No se encontro el contacto deseado");
                                     }
                                     //cout << usuario << endl;
                                     contador = 0;
@@ -231,13 +245,21 @@ int main(){
                                     }
                                     guardarUsuariosF(usuarios);
 
+                                }else{
+                                cout << "No tienes contactos para eliminar" << endl;
+                                }
+                                }catch(out_of_range& e){
+                                cout << e.what() << endl;
+                                }
                                 }
                             break;
                             case 4:
                                 {
+                                    try{
                                     int idBuscado;
                                     int contador = 0;
                                     bool encontrado = false;
+                                    if(!usuario.getContactos().empty()){
                                     cout << "Ingresa el id del contacto que buscas" << endl;
                                     idBuscado = leerInt();
                                     system("CLS");
@@ -250,9 +272,15 @@ int main(){
                                         }
                                     }
                                     if(!encontrado){
-                                        cout << "No se encontro el contacto deseado" << endl;
+                                        throw out_of_range("No se encontro el contacto deseado");
                                     }
+                                }else{
+                                cout << "No tienes contactos para buscar" << endl;
                                 }
+                                }catch(out_of_range& e){
+                                cout << e.what() << endl;
+                                }
+                            }
                             break;
                             case 0:
                                 {
@@ -282,6 +310,7 @@ int main(){
             break;
             case 4:
                 {
+                try{
                     int idBuscado;
                     bool encontrado = false;
                     cout << "ID del usuario a buscar:";
@@ -295,7 +324,10 @@ int main(){
                         }
                     }
                     if(!encontrado){
-                        cout << "Lo sentimos, no pudimos encontrar un usuario con ese ID" << endl;
+                        throw out_of_range("Lo sentimos, no pudimos encontrar un usuario con ese ID");
+                    }
+                    }catch(out_of_range& e){
+                        cout << e.what() << endl;
                     }
                 }
             break;
